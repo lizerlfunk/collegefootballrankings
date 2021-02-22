@@ -132,6 +132,7 @@ fit1 <- fitdist(wins2019, 'beta')
 descdist(games_19$home_points)
 descdist(games_19$away_points)
 
+#cleaning data--we only need home team, away team, and the winner of the game
 games_19<- subset(games_19, select = -c(season_type,start_time_tbd))
 games_19<- subset(games_19, select = -c(game_id,neutral_site,conference_game,attendance,venue_id,venue,home_id,away_id,home_post_win_prob,away_post_win_prob,excitement_index))
 games_19<- subset(games_19, select = -c(home_conference,away_conference))
@@ -153,16 +154,7 @@ games_18 <- games_18 %>% mutate(awaywin = 0)
 games_18$homewin <- ifelse(games_18$home_points > games_18$away_points, 1, 0)
 games_18$awaywin <- ifelse(games_18$home_points > games_18$away_points, 0, 1)
 
-games_19_massey<- subset(games_19, select = -c(season,week))
-games_19_massey <- games_19_massey[,c(1,3,2,4,5,6,7)]
-games_19_massey<- subset(games_19_massey, select = -c(home_points, away_points, winner))
-games_19_massey$home_team <- as.factor(games_19_massey$home_team)
-games_19_massey$away_team <- as.factor(games_19_massey$away_team)
-
-games_18_ACC<- subset(games_18_ACC, select = -c(season,week))
-games_18_ACC<- subset(games_18_ACC, select = -c(home_conference,away_conference))
-games_18_ACC <- games_18_ACC[,c(1,3,2,4,5)]
-
+#retrieving the Playoff Committee Rankings for each season
 rankings_18 <- cfb_rankings(2018, week = NULL, season_type = "regular")
 rankings_18 <- rankings_18 %>% filter(poll == "Playoff Committee Rankings")
 write.csv(rankings_18, "CFPrankings2018.csv")  
